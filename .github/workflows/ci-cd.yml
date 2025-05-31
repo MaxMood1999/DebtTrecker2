@@ -35,7 +35,8 @@ jobs:
           port: 22
           script: |
             cd /var/www/DebtAPI
-            git pull --rebase
+            git fetch origin
+            git reset --hard origin/master
             git pull origin
             source .venv/bin/activate
             pip install -r requirements.txt
