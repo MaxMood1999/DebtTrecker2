@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /var/www/DebtAPI
-            git pull origin master
+            git pull 
             source .venv/bin/activate
             pip install -r requirements.txt
             make mig
