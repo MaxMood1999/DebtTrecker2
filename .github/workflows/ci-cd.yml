@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build-and-deploy:
@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /var/www/DebtAPI
-            git pull origin main
+            git pull origin master
             source .venv/bin/activate
             pip install -r requirements.txt
             make mig
