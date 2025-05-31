@@ -1,0 +1,89 @@
+1) nano /etc/nginx/sites-available/debt_project
+
+2) server {
+    listen       8000;
+    server_name  109.73.205.31;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        root /var/www/DebtAPI/;
+    }
+
+    location /media/ {
+        root /var/www/DebtAPI/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/var/www/DebtAPI/falcon.sock;
+    }
+}
+
+3) ln -s /etc/nginx/sites-available/debt_project /etc/nginx/sites-enabled/
+
+
+
+4) /etc/systemd/system/debt_project.service
+
+
+5)
+    [Unit]
+    Description=gunicorn daemon
+    After=network.target
+
+    [Service]
+    User=root
+    Group=www-data
+    WorkingDirectory=/var/www/DebtAPI
+    ExecStart=/var/www/DebtAPI/.venv/bin/gunicorn --workers 3 --bind unix:/var/www/DebtAPI/falcon.sock root.wsgi:application
+
+    [Install]
+    WantedBy=multi-user.target
+
+
+
+systemctl start debt_project.service
+systemctl enable debt_project.service
+systemctl restart debt_project.service
+systemctl status debt_project.service
+systemctl stop debt_project.service
+
+
+
+systemctl enable enginx.service
+
+
+
+1. comp -> github, gitlab, bitbucket -> server
+
+2. comp -> server
+
+
+
+scp file root@IP:/var/www
+python3 manage.py runserver 0:8004
+
+
+
+/etc/nginx/sites-available/allauth
+
+ln -s /etc/nginx/sites-available/allauth /etc/nginx/sites-enabled/
+
+/etc/nginx/sites-enabled/
+sudo nginx -t
+
+
+ufw:
+    sudo ufw allow 'Nginx HTTP'
+    sudo ufw allow 22
+    sudo ufw allow 80
+    sudo ufw allow 443
+    sudo ufw allow 8000
+    sudo ufw reload
+
+terminalda ishlatish kerak ohirida:
+    ls -l /var/www/DebtAPI/falcon.sock
+    sudo chown www-data:www-data /var/www/DebtAPI/falcon.sock
+    sudo chmod 660 /var/www/DebtAPI/falcon.sock
+    python manage.py collectstatic
