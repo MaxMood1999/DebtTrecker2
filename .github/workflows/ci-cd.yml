@@ -39,7 +39,6 @@ jobs:
             source .venv/bin/activate
             pip install -r requirements.txt
             make mig
-#            python manage.py collectstatic --noinput
             sudo systemctl restart debt_project.service
             sudo systemctl enable debt_project.service
             sudo systemctl restart nginx
